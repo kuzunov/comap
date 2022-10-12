@@ -23,7 +23,7 @@ class UserApiE extends ApiClientImpl<IdType, IUser> implements UserApiClientI {
     };
     login = async (user:Partial<IUser>) => {
       return this.handleRequest(
-        `${API_BASE_URL}/auth/login`,
+        `${API_BASE_URL}/api/auth/login`,
         {
           method:'POST',
           headers: {
@@ -34,7 +34,7 @@ class UserApiE extends ApiClientImpl<IdType, IUser> implements UserApiClientI {
       );
     };
     register = async (user:Partial<IUser>) => {
-      return await this.handleRequest(`${API_BASE_URL}/auth/register`, {
+      return await this.handleRequest(`${API_BASE_URL}/api/auth/register`, {
         method: "POST",
         headers: {
           "content-type": "application/json",

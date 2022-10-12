@@ -22,10 +22,11 @@ const userInitialState = {
 interface userContextType {
   currentUserState:userState,
   login?: (user:Partial<IUser>)=>void,
-  logout?: () => void
+  logout?: () => void,
+  getToken: () => string|undefined,
 } 
 type ProviderProps = {children:React.ReactNode}
-const UserContext = React.createContext<userContextType>({currentUserState: userInitialState})
+export const UserContext = React.createContext<userContextType>({currentUserState: userInitialState, getToken:()=>undefined})
 
 export const UserContextProvider:React.FC<ProviderProps> = (props: ProviderProps ) => {
     const [cookies, setCookie, removeCookie] = useCookies(['comapauth']);
@@ -83,9 +84,17 @@ export const UserContextProvider:React.FC<ProviderProps> = (props: ProviderProps
         setCurrentUser({...userInitialState});
         navigate('/',{replace:true})
       };
+      const getToken =() => {
+        if (currentUserState.isLoggedIn){
+          const token = cookies['comapauth'].token;
+          if (token) return token;
+        }
+        return undefined;
+      }
       return (
         <UserContext.Provider value={{
           currentUserState,
+          getToken,
           login,
           logout,
         }}>

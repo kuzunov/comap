@@ -1,6 +1,6 @@
 import { Button, Card, CardActions, CardContent, CardMedia, ClickAwayListener, IconButton, Popover, Typography } from '@mui/material';
 import Backdrop from '@mui/material/Backdrop/Backdrop';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Form, Outlet, useLoaderData, useLocation, useNavigate } from 'react-router-dom';
 import { IEvent } from '../../model/event';
 import MapHOC from '../maps/MapHOC';
@@ -10,12 +10,12 @@ import { IComment } from '../../model/comment';
 import { useAuth } from '../users/UserContext';
 import { USER_ROLE } from '../../model/user';
 import AddComment from '../comments/AddComment';
+import { CommentsApi } from '../../service/CommentsApi';
 
 
 type Props = {}
 
 const EventDetails = (props: Props) => {
-  const {event,local, comments} = useLoaderData() as {event: IEvent, local:boolean,comments:IComment[]};
   const navigate = useNavigate();
   const {currentUserState} = useAuth();
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
@@ -25,6 +25,8 @@ const EventDetails = (props: Props) => {
     setAnchorEl(e.currentTarget);
     navigate(`share`,{replace:true})
   }
+  const {event,local,comments} = useLoaderData() as {event: IEvent, local:boolean,comments:(IComment&{authorUsername:string})[]};
+  
   const closeShare = () => {
     setAnchorEl(null);
   };

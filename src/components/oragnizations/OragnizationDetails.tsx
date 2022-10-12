@@ -68,7 +68,7 @@ const OragnizationDetails = (props: Props) => {
                   }}
                 ><Outlet /></Popover>
         </ClickAwayListener>
-        <CommentsList comments={comments}/>
+        {/* //<CommentsList comments={comments}/> */}
       <CardActions>
         <IconButton  size="small" color="primary" onClick={openShare}>
           <ShareIcon/>

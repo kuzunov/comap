@@ -31,7 +31,7 @@ type FormData = {
 };
 
 const AddEvent = (props: Props) => {
-  const {currentUserState} = useAuth();
+  const {currentUserState,getToken} = useAuth();
   const navigate = useNavigate();
   const loaderEvent = useLoaderData() as IEvent;
 
@@ -81,7 +81,7 @@ const AddEvent = (props: Props) => {
     data.organizer = currentUserState.currentUser.id;
     data.date = new Date(data.date).getTime().toString();
     try {
-    const resp = await EventsApi.create(data);
+    const resp = await EventsApi.create(data,getToken!());
     console.log(resp);
     //(loaderEvent && data.id)?  EventsApi.update(data):  EventsApi.create(data)
     } catch (error) { console.log(error)}
@@ -94,8 +94,7 @@ const AddEvent = (props: Props) => {
         open={open}
         onClick={handleClose}
       >
-        <RequireAuth>
-    {/* <ClickAwayListener onClickAway={handleClose}> */}
+      {/* <ClickAwayListener onClickAway={handleClose}> */}
     <Card sx={{ width: "50%", maxHeight:"90%", overflowY:"auto"}} onClick={(e:React.MouseEvent)=>e.stopPropagation()}>
       {(!error.valid) && <>Error message: {error.message}</>} 
     <Box
@@ -128,7 +127,6 @@ const AddEvent = (props: Props) => {
       </Box>
     </Card>
     {/* </ClickAwayListener> */}
-    </RequireAuth>
     </Backdrop>
   )
   }

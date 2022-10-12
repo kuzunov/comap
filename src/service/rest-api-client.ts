@@ -1,4 +1,5 @@
 
+import { UserContext } from "../components/users/UserContext";
 import { API_ENDPOINT } from "../evn.var.config";
 import { IEvent } from "../model/event";
 import { IOrganization } from "../model/organization";
@@ -33,7 +34,7 @@ export class ApiClientImpl<K, V extends Identifiable<K>>
       `${API_BASE_URL}/${this.apiCollectionSuffix}/${id}`
     );
   }
-  create(entityWithoutId: Partial<V>): Promise<V> {
+  create(entityWithoutId: Partial<V>,token?:string): Promise<V> {
     return this.handleRequest(`${API_BASE_URL}/${this.apiCollectionSuffix}`, {
       method: "POST",
       headers: {
@@ -42,7 +43,7 @@ export class ApiClientImpl<K, V extends Identifiable<K>>
       body: JSON.stringify(entityWithoutId),
     });
   }
-  update(entity: V): Promise<V> {
+  update(entity: V,token?:string): Promise<V> {
     return this.handleRequest(
       `${API_BASE_URL}/${this.apiCollectionSuffix}`,
       {
@@ -54,7 +55,7 @@ export class ApiClientImpl<K, V extends Identifiable<K>>
       }
     );
   }
-  deleteById(id: K): Promise<V> {
+  deleteById(id: K,token?:string): Promise<V> {
     console.log({id: id})
     return this.handleRequest(
       `${API_BASE_URL}/${this.apiCollectionSuffix}`,
@@ -66,7 +67,6 @@ export class ApiClientImpl<K, V extends Identifiable<K>>
       }
     );
   }
-
   protected async handleRequest(url: string, options?: RequestInit) {
     try {
       const resp = await fetch(url, options);
@@ -85,4 +85,3 @@ class OrganizationsApiE extends ApiClientImpl<IdType, IOrganization> {}
 
 export const EventsApi = new EventsApiE("events");
 export const OrganizationsApi = new OrganizationsApiE("organizations");
-export {};

@@ -1,8 +1,9 @@
 import { Button, ClickAwayListener, Input, Popover } from '@mui/material';
-import React, { useState } from 'react'
-import { useLocation } from 'react-router-dom';
+import React, { FormEvent, FormEventHandler, useState } from 'react'
+import { Form, useLocation } from 'react-router-dom';
 import { IdType } from '../../model/sharedTypes';
 import { CommentsApi } from '../../service/CommentsApi';
+import { useAuth } from '../users/UserContext';
 
 type Props = {
   parentId:IdType;
@@ -10,6 +11,7 @@ type Props = {
 
 const AddComment = ({parentId}: Props) => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const {currentUserState,getToken} = useAuth();
   const openCommentForm = (e:React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     setAnchorEl(e.currentTarget);
@@ -20,10 +22,20 @@ const AddComment = ({parentId}: Props) => {
   const openPopover = Boolean(anchorEl);
   const popOverId = openPopover ? 'simple-popover' : undefined;
     const [open, setOpen] = useState(true);
+    const [body, setBody] = useState('');
     const handleClose = () => {
       setOpen(false);
     };
-const addComment = () => {
+const addComment = (e:React.SyntheticEvent) => {
+  e.preventDefault();
+  console.log(body)
+  const commentBody = body;
+  if (commentBody) {
+    CommentsApi.createComment({body: commentBody, authorId: currentUserState.currentUser.id},'events',parentId,getToken())
+  }
+}
+const updateBody =  (e:React.ChangeEvent<HTMLInputElement>) => {
+  setBody(e.target.value)
 }
   return (<>
     <Button onClick={openCommentForm}>Add Comment</Button>
@@ -42,10 +54,10 @@ const addComment = () => {
                     horizontal: 'center',
                   }}
                 >
-                  <Input />
-                  <Button onClick={addComment}>Submit Comment</Button>
-                </Popover>
-    </ClickAwayListener>
+                  <Input onChange={updateBody} name='body' type='text'></Input>
+                  <Button onClick={addComment}>Add Comment</Button>
+            </Popover>
+  </ClickAwayListener>
     </>
   )
 }

@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { IComment } from '../../model/comment'
+import { UsersApi } from '../../service/UsersApi'
 
 
-const Comment = ({id, created,modified,body,authorId}: IComment) => {
+const Comment = ({id, created,modified,body,authorId,authorUsername}: IComment & {authorUsername:string}) => {
   return (
-    <div>Comment: {`${id}, ${created},${modified},${body},${authorId}}`}</div>
+    <div>Comment: {`Author: ${authorUsername} Body: ${body}`}</div>
   )
 }
 

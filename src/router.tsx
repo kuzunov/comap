@@ -20,6 +20,8 @@ import ShareButtons from "./components/main/ShareButtons";
 import ErrorComponent from "./components/ErrorComponent";
 import UsersList from "./components/users/UsersList";
 import { UsersApi } from "./service/UsersApi";
+import { RequireAuth } from "./components/users/RequireAuth";
+import { CommentsApi } from "./service/CommentsApi";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -54,7 +56,11 @@ export const router = createBrowserRouter([
             loader: async ({ params }) => {
               if (params.eventId) {
                 const eventId = params.eventId;
-                return { event: await EventsApi.findById(eventId), local: "", comments: [{id:1,body:1},{id:1,body:1},{id:1,body:1}]};
+                const comments = await CommentsApi.getByParentId("events",eventId);
+                const event = await EventsApi.findById(eventId)
+                return { event: event , local: "",
+                        comments: comments
+                };
               }
           
             },
@@ -79,19 +85,19 @@ export const router = createBrowserRouter([
           },
           {
             path: "add",
-            element: <AddEvent />,
+            element:<RequireAuth><AddEvent /></RequireAuth>,
             errorElement: <ErrorComponent/>,
           },
           {
             path: ":eventId/edit",
-            errorElement: <ErrorComponent/>,
+            errorElement:<ErrorComponent/>,
             loader: ({ params }) => {
               if (params.eventId) {
                 const eventId = params.eventId;
                 return EventsApi.findById(eventId);
               }
             },
-            element: <AddEvent />,
+            element: <RequireAuth><AddEvent /></RequireAuth>,
           },
         ],
       },
@@ -114,7 +120,7 @@ export const router = createBrowserRouter([
           },
           {
             path: "add",
-            errorElement: <ErrorComponent/>,
+            errorElement: <RequireAuth><ErrorComponent/></RequireAuth>,
             loader: () => {
               // return mockEevents[1];
             },
@@ -140,7 +146,7 @@ export const router = createBrowserRouter([
         },
         {
           path:":userId/profile/edit",
-          element: <EditUserForm />,
+          element: <RequireAuth><EditUserForm /></RequireAuth>,
           loader:async ({params}) => {
             if (params.userId){
               return await UsersApi.findById(params.userId);
