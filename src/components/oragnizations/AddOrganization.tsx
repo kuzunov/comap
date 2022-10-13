@@ -1,11 +1,9 @@
-import React from 'react'
+import React from "react";
 
-type Props = {}
+type Props = {};
 
 const AddOrganization = (props: Props) => {
-  return (
-    <div>AddOrganization</div>
-  )
-}
+  return <div>AddOrganization</div>;
+};
 
-export default AddOrganization
+export default AddOrganization;

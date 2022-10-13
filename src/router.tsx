@@ -17,11 +17,15 @@ import Profile from "./components/users/Profile";
 import { EventsApi, OrganizationsApi } from "./service/rest-api-client";
 import Login from "./components/users/Login";
 import ShareButtons from "./components/main/ShareButtons";
-import ErrorComponent from "./components/ErrorComponent";
 import UsersList from "./components/users/UsersList";
 import { UsersApi } from "./service/UsersApi";
 import { RequireAuth } from "./components/users/RequireAuth";
 import { CommentsApi } from "./service/CommentsApi";
+import ErrorComponent from "./components/main/ErrorComponent";
+import CommentsList from "./components/comments/CommentsList";
+import { IEvent } from "./model/event";
+import { json } from "stream/consumers";
+import { IComment } from "./model/comment";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -49,6 +53,38 @@ export const router = createBrowserRouter([
         loader: () => {
           return EventsApi.findAll();
         },
+        action: async ({request,params}) => {
+          try {
+         switch (request.method) {
+          case "POST":
+            { 
+              const fd = await request.formData()
+              const eventData = fd.get('event');
+              const tokenData = fd.get('token') as string;
+              const res = await EventsApi.create(JSON.parse(eventData as string),tokenData);
+              return res;
+          }
+           
+          case "DELETE": 
+          {
+            const fd = await request.formData()
+            const id = fd.get('id') as string;
+            const token = fd.get('token') as string
+            const response = await EventsApi.deleteById(id,token);
+            return;
+          }
+          case "PUT":
+            { 
+              const fd = await request.formData()
+              const eventData = fd.get('event');
+              const tokenData = fd.get('token') as string;
+              let entity = JSON.parse(eventData as string)
+              console.log(entity)
+              const res = await EventsApi.update(entity,tokenData);
+              //return res;
+          } 
+        }} catch (e) {console.log(e)}
+      },
         children: [
           {
             path: ":eventId",
@@ -56,10 +92,8 @@ export const router = createBrowserRouter([
             loader: async ({ params }) => {
               if (params.eventId) {
                 const eventId = params.eventId;
-                const comments = await CommentsApi.getByParentId("events",eventId);
                 const event = await EventsApi.findById(eventId)
                 return { event: event , local: "",
-                        comments: comments
                 };
               }
           
@@ -67,20 +101,35 @@ export const router = createBrowserRouter([
             element: <EventDetails />,
             children: [
               {
-                path: "delete",
-                action: async ({ params }) => {
-                  if (params.eventId) {
-                    const eventId = params.eventId;
-                    return await EventsApi.deleteById(eventId);
-                  }
-                },
-                             
-                
-              },
-              {
                 path: "share",
                 element:<ShareButtons />,
               },
+              {
+                path: "comments",
+                //element: <CommentsList />,
+                index:true,
+                loader: async ({params}) => {
+                  if (params.eventId) {
+                    const comments = await CommentsApi.getByParentId("events",params.eventId);
+                    return comments;
+                  }
+                  
+                },
+                action: async ({params,request}) => {
+                  if(request.method === "POST") {
+                    if (params.eventId){
+                    const fd = await request.formData()
+                    const commentData = fd.get("comment") as unknown as string;
+                    const comment = JSON.parse(commentData)
+                    const token = fd.get('token') as string;
+                    console.log(token)
+
+                    const resp = await CommentsApi.createComment(comment,'events',params.eventId,token)
+                    console.log(resp)
+                   }
+                  }
+                }
+              }
             ],
           },
           {

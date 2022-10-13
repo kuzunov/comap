@@ -1,12 +1,10 @@
-import React from 'react'
-import { Outlet } from 'react-router-dom'
+import React from "react";
+import { Outlet } from "react-router-dom";
 
-type Props = {}
+type Props = {};
 
 const UsersList = (props: Props) => {
-  return (
-    <Outlet />
-  )
-}
+  return <Outlet />;
+};
 
-export default UsersList
+export default UsersList;

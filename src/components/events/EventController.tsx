@@ -1,35 +1,45 @@
-import { Button, Container } from '@mui/material';
-import { Form, useFetcher, useLoaderData, useNavigate } from 'react-router-dom';
-import { IEvent } from '../../model/event';
-import EventList from './EventList'
-
+import { Button, Container } from "@mui/material";
+import { useEffect } from "react";
+import { Form, useFetcher } from "react-router-dom";
+import { IEvent } from "../../model/event";
+import { IdType } from "../../model/sharedTypes";
+import { useAuth } from "../users/UserContext";
+import EventList from "./EventList";
 
 type Props = {
-  eventsToDisplay?:IEvent[]}
+  eventsToDisplay?: IEvent[];
+};
 
-const EventController = ({eventsToDisplay}: Props) => {
-  //const [events, setEvents] = useState<IEvent[]>();
-  const navigate = useNavigate();
+const EventController = ({ eventsToDisplay }: Props) => {
+  const { getToken } = useAuth();
   const fetcher = useFetcher();
-  // const dashEvents = () => {
-  //   setEvents(mockEevents.slice(0,3));
-  // };
-  const addEvent = () => {
-    navigate("/events/add")
-  }
-  
-  const events = useLoaderData() as IEvent[]
-  // useEffect(()=>{
-  //   setEvents(eventsL);
-  // },[]);
-  return (
-  <Container sx={{margin:"20px"}}>
-    <Form action="add">
-      <Button variant="contained" sx={{color:"white",margin:"5px 0px"}} type="submit">Add New Event</Button>
-    </Form>
-    <EventList events={events} />
-  </Container>
-  )
-}
 
-export default EventController
+  useEffect(() => {
+    if (fetcher.state === "idle" && !fetcher.data) {
+      fetcher.load("/events");
+    }
+  }, [fetcher]);
+
+  const onDelete = (id: IdType) => {
+    fetcher.submit(
+      { id: id as string, token: getToken() as string },
+      { method: "delete", action: "/events" }
+    );
+  };
+  return (
+    <Container sx={{ margin: "20px" }}>
+      <Form action="add">
+        <Button
+          variant="contained"
+          sx={{ color: "white", margin: "5px 0px" }}
+          type="submit"
+        >
+          Add New Event
+        </Button>
+      </Form>
+      <EventList events={fetcher.data} onDelete={onDelete} />
+    </Container>
+  );
+};
+
+export default EventController;

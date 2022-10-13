@@ -1,12 +1,10 @@
-import React from 'react'
-import { Outlet } from 'react-router-dom'
+import React from "react";
+import { Outlet } from "react-router-dom";
 
-type Props = {}
+type Props = {};
 
 const Sidebar = (props: Props) => {
-  return (
-<>sidebar</>
-  )
-}
+  return <>sidebar</>;
+};
 
-export default Sidebar
+export default Sidebar;

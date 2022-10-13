@@ -1,38 +1,42 @@
-import { Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Typography } from '@mui/material'
-import { Link, useFetcher, useNavigate } from 'react-router-dom'
-import { IEvent } from '../../model/event'
+import {
+  Button,
+  Card,
+  CardActionArea,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Typography,
+} from "@mui/material";
+import { Link } from "react-router-dom";
+import { IEvent } from "../../model/event";
+import { IdType } from "../../model/sharedTypes";
 
-
-const Event = ({name,date,organizer,poster,participants,id}: IEvent) => {
-  const navigate=useNavigate();
-  const onDelete = () => {
-    navigate(`/events/${id}/delete`);
-  }
-  const fetcher = useFetcher();
+type eventProps = {
+  event: IEvent;
+  onDelete: (id: IdType) => void;
+};
+const Event = ({ event, onDelete }: eventProps) => {
   return (
     <Card>
-      <Link to={`/events/${id}`}>
-      <CardActionArea>
-      <CardMedia
-      image={poster}
-      component="img"
-      height="140"
-      >
-      </CardMedia>
-      <CardContent>
-        <Typography>
-          {name}
-        </Typography>
-      </CardContent>
-      </CardActionArea>
+      <Link to={`/events/${event.id}`}>
+        <CardActionArea>
+          <CardMedia
+            image={event.poster}
+            component="img"
+            height="140"
+          ></CardMedia>
+          <CardContent>
+            <Typography>{event.name}</Typography>
+          </CardContent>
+        </CardActionArea>
       </Link>
-      <CardActions>        
-        <fetcher.Form method="delete" action={`${id}/delete`}>
-          <Button type="submit" size="small">DELETE</Button>
-        </fetcher.Form>
+      <CardActions>
+        <Button onClick={() => onDelete(event.id)} size="small">
+          DELETE
+        </Button>
       </CardActions>
     </Card>
-  )
-}
+  );
+};
 
-export default Event
+export default Event;
