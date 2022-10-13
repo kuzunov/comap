@@ -29,15 +29,11 @@ Clone the [CoMAP repository](https://github.com/kuzunov/comap).
 
 The app requires a Google API key, with the following APIs activated: 
 
-```
-Maps JavaScript API
-
+##### Maps JavaScript API
 ~~Geocoding API~~
-
 ~~Geolocation API~~
+##### Places API
 
-Places API
-```
 
 You have to put your API key in a `.env` file in the root directory of the project. The name of the variable is
 ```
