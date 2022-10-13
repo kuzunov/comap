@@ -36,7 +36,8 @@ Maps JavaScript API
 
 ~~Geolocation API~~
 
-Places API```
+Places API
+```
 
 You have to put your API key in a `.env` file in the root directory of the project. The name of the variable is
 ```
