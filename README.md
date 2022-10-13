@@ -1,46 +1,65 @@
-# Getting Started with Create React App
+# CoMAP
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+CoMAP (Community organization, management and planning) is a final course project for the 2022 React Fullstack Academy, organized by [*AKKODIS* ](https://www.akkodis.com/) (formerly [MODIS](https://www.modis.com/en-bg/)).
 
-## Available Scripts
+###### [You can also check out the backend part of the project here!](https://github.com/kuzunov/comap-server)
 
-In the project directory, you can run:
+## Idea
 
-### `yarn start`
+The project got its start from my own desire to have a robust and mutable social network, that helps people organize direct action activities. Initial versions will be centralized, and will gradually transition to a more decentralized network. 
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Features
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+#### Locations
+    One of the more important parts of direct action is location. Communities need to be in close proximity to interact and take part in direct action. This will only be an initial feature until communities are organized.
+#### Handling event organization
+    Events will be organized according to need. Organizations can add events and manage them.
+#### Social networks
+    The main focus is easier community organization and local, robust, active network forming. CoMAP will be used to coordinate members and users and notify them of events, that may be of interest to them. 
+#### Time banks
+    Time banks are not yet available, but will be the second major feature of CoMAP. The app will help users and organizations handle labour-time and time-based volunteering. Users will have skills and expertise they are willing to share with others in exchange for time-vouchers that could be used in the app. 
 
-### `yarn test`
+    Users will be able to search for users by their skills, organizations will be able to broadcast their need for specific skills in regard to events and more.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `yarn build`
+## Installation
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Starting the main app
+    Clone the [CoMAP repository](https://github.com/kuzunov/comap). 
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+    The app requires a Google API key, with the following APIs activated: 
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+    Maps JavaScript API
 
-### `yarn eject`
+    ~~Geocoding API~~
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+   ~~Geolocation API~~
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+    Places API
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+You have to put your API key in a `.env` file in the root directory of the project. The name of the variable is
+```
+REACT_APP_GOOGLE_API_KEY = YOUR_API_KEY
+```
+There are some other variables you have to set before you can run the app:
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+In the env.var.config.ts file in the src directory of the project
 
-## Learn More
+```
+const AVATAR_FOLDER = '/avatar_folder/' - folder for default avatars
+const DEFAULT_AVATAR = 'default_avatar_' - default avatar prefix
+const APP_URL = 'http://localhost:3000' - main app url
+const API_BASE_URL = 'http://localhost:64000' - backend url endpoin
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+After the initial configuration, run yarn or npm to download dependencies. You can check the `package.json` file for more information on the dependencies.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+The `start` script runs the app;
+
+Don't forget to run the backend part of the app first! [CoMAP server](https://github.com/kuzunov/comap-server)
+
+## Main technologies
+
+#### [React](https://reactjs.org/)
+#### [MUI](https://mui.com/)
+#### [Google APIs](https://developers.google.com/apis-explorer)
