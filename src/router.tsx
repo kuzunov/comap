@@ -125,10 +125,7 @@ export const router = createBrowserRouter([
                     const commentData = fd.get("comment") as unknown as string;
                     const comment = JSON.parse(commentData)
                     const token = fd.get('token') as string;
-                    console.log(token)
-
                     const resp = await CommentsApi.createComment(comment,'events',params.eventId,token)
-                    console.log(resp)
                    }
                   }
                 }

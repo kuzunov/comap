@@ -207,7 +207,7 @@ const EditUserForm = () => {
         center={user.location}
         markers={[{ position: user.location }]}
         maxNumOfMarkers={1}
-        editable={getValues("id") === currentUserState.currentUser.id}
+        editable={true}
         updateMarkerArray={updateMarkersArray}
       />
 
