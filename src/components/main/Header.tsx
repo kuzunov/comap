@@ -10,6 +10,7 @@ import { useAuth } from "../users/UserContext";
 import { USER_ROLE } from "../../model/user";
 import LogoutIcon from "@mui/icons-material/Logout";
 import LoginIcon from "@mui/icons-material/Login";
+import PersonPinIcon from '@mui/icons-material/PersonPin';
 import { APP_URL, AVATAR_FOLDER, DEFAULT_AVATAR } from "../../evn.var.config";
 import {
   AppBar,
@@ -60,6 +61,7 @@ const Header = (props: Props) => {
     <AppBar position="fixed">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
+          <Tooltip title="Home">
           <NavLink
             to="/"
             end
@@ -75,7 +77,8 @@ const Header = (props: Props) => {
                 </IconButton>
               );
             }}
-          />
+          /></Tooltip>
+          <Tooltip title="Events">
           <NavLink
             to="/events"
             children={({ isActive }) => {
@@ -90,8 +93,8 @@ const Header = (props: Props) => {
                 </IconButton>
               );
             }}
-          />
-
+          /></Tooltip>
+          <Tooltip title="Organizations">
           <NavLink
             to="/organizations"
             children={({ isActive }) => {
@@ -106,7 +109,23 @@ const Header = (props: Props) => {
                 </IconButton>
               );
             }}
-          />
+          /></Tooltip>
+          <Tooltip title="Users"> 
+          <NavLink
+            to="/users"
+            children={({ isActive }) => {
+              return (
+                <IconButton
+                  size="large"
+                  edge="start"
+                  aria-label="menu"
+                  sx={{ mr: 2, color: isActive ? "grey" : "white" }}
+                >
+                  <PersonPinIcon />
+                </IconButton>
+              );
+            }}
+          /></Tooltip>
 
           <Typography variant="overline" component="div" sx={{ flexGrow: 1 }}>
             {currentUserState.isLoggedIn

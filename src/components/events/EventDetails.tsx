@@ -70,7 +70,7 @@ const EventDetails = (props: Props) => {
   }, [fetcher.data, fetcher.state, fetcher]);
   return (
     <Backdrop
-      sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      sx={{ color: "#fff", zIndex: (theme:any) => theme.zIndex.drawer + 1 }}
       open={open}
       onClick={handleClose}
     >
@@ -120,7 +120,7 @@ const EventDetails = (props: Props) => {
           <IconButton size="small" color="primary" onClick={openShare}>
             <ShareIcon />
           </IconButton>
-          <AddComment parentId={event.id} />
+        {(currentUserState.isLoggedIn) && <AddComment parentId={event.id} />}
           {(event.organizer === currentUserState.currentUser.id ||
             currentUserState.currentUser.role === USER_ROLE.ADMIN) && (
             <Form method="get" action={`edit`}>

@@ -1,6 +1,7 @@
 import { API_ENDPOINT } from "../evn.var.config";
 import { IEvent } from "../model/event";
 import { IOrganization } from "../model/organization";
+import { IReview } from "../model/review";
 import { Identifiable, IdType } from "../model/sharedTypes";
 
 const API_BASE_URL = `${API_ENDPOINT}`;
@@ -75,6 +76,26 @@ export class ApiClientImpl<K, V extends Identifiable<K>>
 }
 class EventsApiE extends ApiClientImpl<IdType, IEvent> {}
 class OrganizationsApiE extends ApiClientImpl<IdType, IOrganization> {}
+type DashboardApiI = {findAll:()=>{events:IEvent[],reviews:IReview[]}}
+
+class DashboardApiC {
+  findAll(): Promise<{events:IEvent[], reviews:({body:number,id:number})}> {
+    return this.handleRequest(`${API_BASE_URL}/dashboard`);
+  }
+  protected async handleRequest(url: string, options?: RequestInit) {
+    try {
+      const resp = await fetch(url, options);
+      if (resp.status >= 400) {
+        return Promise.reject(await resp.json());
+      }
+      return await resp.json();
+    } catch (err) {
+      console.log(err);
+      return Promise.reject(err);
+    }
+  }
+}
 
 export const EventsApi = new EventsApiE("events");
 export const OrganizationsApi = new OrganizationsApiE("organizations");
+export const DashboardApi = new DashboardApiC();

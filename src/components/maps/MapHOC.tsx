@@ -132,6 +132,7 @@ const MapHOC = ({
             indexInArray={index}
             changeMarkerPosition={changeMarkerPosition}
             removeMarker={removeMarker}
+            editable={(editable)?editable:false}
           />
         ))}
       </GoogleMap>

@@ -4,17 +4,15 @@ import EventController from "./components/events/EventController";
 import EventDetails from "./components/events/EventDetails";
 import About from "./components/main/About";
 import App from "./components/main/App";
-import Dashboard from "./components/main/Dashboard";
+import Dashboard from "./components/main/Dashboard/Dashboard";
 import NotFound from "./components/NotFound";
 import AddOrganization from "./components/oragnizations/AddOrganization";
 import OragnizationDetails from "./components/oragnizations/OragnizationDetails";
 import Organizations from "./components/oragnizations/Oganizations";
 import LatestReviews from "./components/reviews/LatestReviews";
-import Review from "./components/reviews/Review";
-import ReviewList from "./components/reviews/ReviewList";
 import EditUserForm from "./components/users/EditUserForm";
 import Profile from "./components/users/Profile";
-import { EventsApi, OrganizationsApi } from "./service/rest-api-client";
+import { DashboardApi, EventsApi, OrganizationsApi } from "./service/rest-api-client";
 import Login from "./components/users/Login";
 import ShareButtons from "./components/main/ShareButtons";
 import UsersList from "./components/users/UsersList";
@@ -22,19 +20,24 @@ import { UsersApi } from "./service/UsersApi";
 import { RequireAuth } from "./components/users/RequireAuth";
 import { CommentsApi } from "./service/CommentsApi";
 import ErrorComponent from "./components/main/ErrorComponent";
-import CommentsList from "./components/comments/CommentsList";
-import { IEvent } from "./model/event";
-import { json } from "stream/consumers";
-import { IComment } from "./model/comment";
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
     children: [
       {
-        path: "/dashboard",
+        
+        index:true,
         element: <Dashboard />,
         errorElement: <ErrorComponent/>,
+        loader: async () => {
+          try{
+          const dashData = await DashboardApi.findAll();
+          return dashData;
+          } catch (err) {
+            throw err;
+          }
+        }
       },
       {
         path: "/login",
@@ -181,29 +184,30 @@ export const router = createBrowserRouter([
         path: "/users",
         element: <UsersList />,
         errorElement: <ErrorComponent/>,
-        loader: () => {},
+        loader: async () => {
+          return await UsersApi.findAll();
+        },
         children: [
-         { 
-          path:":userId/profile",
-          element: <Profile />,
-          errorElement: <ErrorComponent/>,
-          loader: async ({params}) => {
-            if (params.userId) {
-              return await UsersApi.findById(params.userId)
-            }
+       
+        ],
+      },{ 
+        path:"/users/:userId",
+        element: <Profile />,
+        errorElement: <ErrorComponent/>,
+        loader: async ({params}) => {
+          if (params.userId) {
+            return await UsersApi.findById(params.userId)
+          }
+        }
+      }, {
+        path:"/users/:userId/edit",
+        element: <RequireAuth><EditUserForm /></RequireAuth>,
+        loader:async ({params}) => {
+          if (params.userId){
+            return await UsersApi.findById(params.userId);
           }
         },
-        {
-          path:":userId/profile/edit",
-          element: <RequireAuth><EditUserForm /></RequireAuth>,
-          loader:async ({params}) => {
-            if (params.userId){
-              return await UsersApi.findById(params.userId);
-            }
-          },
-          
-        }
-        ],
+        
       },
       {
         path: "/reviews",

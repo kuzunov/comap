@@ -1,6 +1,6 @@
 import { Button, Container } from "@mui/material";
 import { useEffect } from "react";
-import { Form, useFetcher } from "react-router-dom";
+import { Fetcher, Form, useFetcher } from "react-router-dom";
 import { IEvent } from "../../model/event";
 import { IdType } from "../../model/sharedTypes";
 import { useAuth } from "../users/UserContext";
@@ -11,8 +11,8 @@ type Props = {
 };
 
 const EventController = ({ eventsToDisplay }: Props) => {
-  const { getToken } = useAuth();
-  const fetcher = useFetcher();
+  const { getToken,currentUserState } = useAuth();
+  const fetcher = useFetcher<IEvent[]>();
 
   useEffect(() => {
     if (fetcher.state === "idle" && !fetcher.data) {
@@ -29,13 +29,13 @@ const EventController = ({ eventsToDisplay }: Props) => {
   return (
     <Container sx={{ margin: "20px" }}>
       <Form action="add">
-        <Button
+        {(currentUserState.isLoggedIn) && <Button
           variant="contained"
           sx={{ color: "white", margin: "5px 0px" }}
           type="submit"
         >
           Add New Event
-        </Button>
+        </Button>}
       </Form>
       <EventList events={fetcher.data} onDelete={onDelete} />
     </Container>

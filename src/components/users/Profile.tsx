@@ -30,7 +30,7 @@ const Profile = (props: Props) => {
           variant="contained"
           sx={{ color: "white", margin: "5px 0px" }}
           onClick={() => {
-            navigate(`/users/${id}/profile/edit`);
+            navigate(`/users/${id}/edit`);
           }}
         >
           Edit Profile
@@ -55,7 +55,7 @@ const Profile = (props: Props) => {
           <Typography variant="h5">
             They are mainly active around:
           </Typography>{" "}
-          <MapHOC center={location} markers={[{ position: location }]} />
+          <MapHOC center={location} markers={[{ position: location }]} editable={false} />
         </>
       )}
     </Box>

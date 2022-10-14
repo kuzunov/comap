@@ -5,10 +5,11 @@ export const Marker: React.FC<
     indexInArray: number;
     changeMarkerPosition(i: number, p: google.maps.LatLngLiteral): void;
     removeMarker(i: number): void;
+    editable:boolean;
   }
 > = (options) => {
   const [marker, setMarker] = React.useState<google.maps.Marker>();
-  const { indexInArray, changeMarkerPosition, removeMarker } = options;
+  const { indexInArray, changeMarkerPosition, removeMarker,editable } = options;
 
   useEffect(() => {
     if (!marker) {
@@ -25,7 +26,7 @@ export const Marker: React.FC<
     if (marker) {
       marker.setOptions(options);
       marker.setClickable(true);
-      marker.setDraggable(true);
+      marker.setDraggable(editable);
       marker.addListener("dragend", () => {
         const newPosition = marker.getPosition();
         if (newPosition) {
