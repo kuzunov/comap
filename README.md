@@ -47,7 +47,7 @@ In the env.var.config.ts file in the src directory of the project
 const AVATAR_FOLDER = '/avatar_folder/' - folder for default avatars
 const DEFAULT_AVATAR = 'default_avatar_' - default avatar prefix
 const APP_URL = 'http://localhost:3000' - main app url
-const API_BASE_URL = 'http://localhost:64000' - backend url endpoin
+const API_BASE_URL = 'http://localhost:64000' - backend url endpoint
 ```
 
 After the initial configuration, run yarn or npm to download dependencies. You can check the `package.json` file for more information on the dependencies.
